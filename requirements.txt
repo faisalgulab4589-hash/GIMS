@@ -1,0 +1,5 @@
+Flask
+openpyxl
+reportlab
+pandas
+bcrypt

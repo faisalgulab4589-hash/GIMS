@@ -1,0 +1,159 @@
+╔════════════════════════════════════════════════════════════════════════════╗
+║                                                                            ║
+║                    THREE CHANGES - QUICK REFERENCE                        ║
+║                                                                            ║
+╚════════════════════════════════════════════════════════════════════════════╝
+
+┌────────────────────────────────────────────────────────────────────────────┐
+│ CHANGE 1: SEMESTER/YEAR DROPDOWN OPTIONS                                  │
+└────────────────────────────────────────────────────────────────────────────┘
+
+✅ NEW OPTIONS ADDED:
+   • Sept-2023
+   • Sept-2024
+   • Sept-2025
+
+📍 WHERE THEY APPEAR:
+   ✓ Desktop Biodata form
+   ✓ Web Biodata form
+   ✓ Student Promotion - Current Semester
+   ✓ Student Promotion - Next Semester
+   ✓ Student Demotion - Current Semester
+   ✓ Student Demotion - Demote to Semester
+   ✓ All Report Filters
+
+📝 FILES CHANGED:
+   • db.py (Line 110-114)
+   • Biodata.py (Line 66)
+
+🧪 QUICK TEST:
+   1. Open Biodata form
+   2. Click semester dropdown
+   3. Verify Sept-2023, Sept-2024, Sept-2025 appear
+
+
+┌────────────────────────────────────────────────────────────────────────────┐
+│ CHANGE 2: FILE UPLOAD SIZE LIMIT                                          │
+└────────────────────────────────────────────────────────────────────────────┘
+
+✅ LIMIT INCREASED:
+   • From: 5MB
+   • To: 10MB
+
+📍 WHAT'S AFFECTED:
+   ✓ Admission picture uploads
+   ✓ All file uploads in web app
+   ✓ Desktop app file uploads
+
+📝 FILES CHANGED:
+   • templates/dashboard.html (Line 866)
+   • main.py (Line 19)
+
+🧪 QUICK TEST:
+   1. Try uploading a 6MB file → Should work ✓
+   2. Try uploading an 11MB file → Should fail ✗
+   3. Check display text shows "Max 10MB"
+
+
+┌────────────────────────────────────────────────────────────────────────────┐
+│ CHANGE 3: FILTER "LEFT" STUDENTS FROM PROMOTION LIST                      │
+└────────────────────────────────────────────────────────────────────────────┘
+
+✅ BEHAVIOR CHANGED:
+   • Students with status "Left" are now EXCLUDED
+   • Only shows: Active, Course Completed, Demoted
+   • Prevents accidental promotion of inactive students
+
+📍 WHERE IT APPLIES:
+   ✓ Student Promotion section
+   ✓ "Generate List" button
+   ✓ Promotion student list
+
+📝 FILES CHANGED:
+   • main.py (Lines 1173-1185)
+
+🧪 QUICK TEST:
+   1. Create student with status "Left"
+   2. Go to Student Promotion
+   3. Select Campus, Board, Semester
+   4. Click "Generate List"
+   5. Verify "Left" student does NOT appear
+
+
+┌────────────────────────────────────────────────────────────────────────────┐
+│ VERIFICATION CHECKLIST                                                     │
+└────────────────────────────────────────────────────────────────────────────┘
+
+CHANGE 1 - Semester Options:
+  [ ] Sept-2023 appears in dropdowns
+  [ ] Sept-2024 appears in dropdowns
+  [ ] Sept-2025 appears in dropdowns
+  [ ] Can select new options
+  [ ] Works in all locations
+
+CHANGE 2 - File Upload Size:
+  [ ] Display text shows "Max 10MB"
+  [ ] Can upload 6MB file
+  [ ] Can upload 9MB file
+  [ ] Cannot upload 11MB file
+  [ ] Error message for oversized files
+
+CHANGE 3 - Filter "Left" Students:
+  [ ] "Left" students don't appear in promotion list
+  [ ] Active students appear
+  [ ] Course Completed students appear
+  [ ] Demoted students appear
+  [ ] Generate List works correctly
+
+
+┌────────────────────────────────────────────────────────────────────────────┐
+│ TECHNICAL DETAILS                                                          │
+└────────────────────────────────────────────────────────────────────────────┘
+
+CHANGE 1:
+  Database: semesters table
+  Desktop: QComboBox in Biodata.py
+  Web: HTML select elements
+  API: /api/semesters endpoint
+
+CHANGE 2:
+  Flask Config: MAX_CONTENT_LENGTH = 10 * 1024 * 1024
+  Display: HTML small text element
+  Validation: Server-side enforcement
+
+CHANGE 3:
+  API: /api/students_for_promotion
+  SQL: WHERE status != 'Left'
+  Statuses Included: Active, Course Completed, Demoted
+  Statuses Excluded: Left
+
+
+┌────────────────────────────────────────────────────────────────────────────┐
+│ ROLLBACK INSTRUCTIONS (IF NEEDED)                                          │
+└────────────────────────────────────────────────────────────────────────────┘
+
+CHANGE 1 - Revert Semester Options:
+  1. Edit db.py line 110-114
+  2. Remove: 'Sept-2023', 'Sept-2024', 'Sept-2025'
+  3. Edit Biodata.py line 66
+  4. Remove new semester options
+
+CHANGE 2 - Revert File Size Limit:
+  1. Edit templates/dashboard.html line 866
+  2. Change "Max 10MB" back to "Max 5MB"
+  3. Edit main.py line 19
+  4. Change 10 * 1024 * 1024 to 5 * 1024 * 1024
+
+CHANGE 3 - Revert "Left" Filter:
+  1. Edit main.py lines 1173-1185
+  2. Remove "AND status != ?" from SQL query
+  3. Remove 'Left' from parameters tuple
+
+
+╔════════════════════════════════════════════════════════════════════════════╗
+║                          STATUS: ✅ ALL COMPLETE                          ║
+╚════════════════════════════════════════════════════════════════════════════╝
+
+All three changes have been successfully implemented and are ready for testing!
+
+
